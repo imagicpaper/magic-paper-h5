@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 const useLogin = create(persist((set) => {
     return {
@@ -10,7 +10,8 @@ const useLogin = create(persist((set) => {
         }
     }
 }, {
-    name: "magic:h5login:temp"
+    name: "magic:h5login:temp",
+    storage: createJSONStorage(() => window.sessionStorage)
 }))
 
 export default useLogin
