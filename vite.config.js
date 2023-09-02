@@ -32,6 +32,9 @@ const autoImpStyle = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  ssr: {
+    noExternal: [/antd-mobile/],
+  },
   server: {
     port: 6001,
     host: '0.0.0.0'

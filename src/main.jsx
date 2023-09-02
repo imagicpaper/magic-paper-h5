@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client'
 import Index from './pages/home'
 import './reset.less'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.hydrateRoot(document.getElementById('root'), (
   <React.StrictMode>
     <Index />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+))
