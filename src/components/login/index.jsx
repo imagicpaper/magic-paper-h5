@@ -1,27 +1,23 @@
 import { Input, Checkbox, Button } from 'antd-mobile'
-import { useCallback,useState } from 'react';
-import useLogin from '../../hooks/useLogin'
+import { useState } from 'react';
+import { Dialog } from 'antd-mobile'
+import { useNavigate } from 'react-router-dom'
+import {useLoginPro} from '../../hooks/useLogin'
 import {useLockFn, useMemoizedFn} from 'ahooks'
 import {message,isVaildPhone, sleep} from '../../utils'
 import Protocol from './protocol'
-import { Dialog } from 'antd-mobile'
 import SendSms from '../SendSms'
+import { useMemo } from 'react';
 
 function Login() {
     // 阅读并同意
     const [isRead, setIsRead] = useState(false)
-    const { phone, code, set } = useLogin();
-
-    // 构建input更新函数
-    const genUpdate = useCallback((key) => {
-        return (value) => {
-            set({[key]: value});
-        }
-    }, [set]);
+    const { data, genOnChange } = useLoginPro();
+    const nav = useNavigate();
 
     // 发送短信
     const onSendSms = useMemoizedFn(async () => {
-        if (!isVaildPhone(phone)) {
+        if (!isVaildPhone(data.phone)) {
             throw new Error('请输入有效的手机号！')
         }
 
@@ -30,6 +26,7 @@ function Login() {
 
     // 点击注册按钮
     const onClickSign = useLockFn(async () => {
+        const { phone, code } = data;
         if (!phone || !code) return;
         if (!isVaildPhone(phone)) {
             message.fail('请输入有效的手机号！')
@@ -49,23 +46,33 @@ function Login() {
         }
 
         await sleep(1e3)
+
+        nav("/result", {
+            replace: true,
+            state: {success: true}
+        })
     })
+
+    // 是否禁止按钮点击
+    const isDisabled = useMemo(() => {
+        return !data.phone || !data.code;
+    }, [data]);
 
     return (
         <div className='ac-login'>
             <div className='ac-input-item'>
                 <Input 
-                    value={phone} 
+                    value={data.phone} 
                     maxLength={11}
-                    onChange={genUpdate("phone")} 
+                    onChange={genOnChange("phone")} 
                     placeholder='请输入手机号'
                 />
             </div>
             <div className='ac-input-item'>
                 <Input 
-                    value={code}
+                    value={data.code}
                     maxLength={6}
-                    onChange={genUpdate("code")}
+                    onChange={genOnChange("code")}
                     placeholder='请输入验证码'
                 />
                 <SendSms onSend={onSendSms} />
@@ -83,7 +90,15 @@ function Login() {
             >
                 我已阅读并同意 <Protocol color="#fff"/>
             </Checkbox>
-            <Button loading="auto" onClick={onClickSign} className='sign-btn' block>注册并收下</Button>
+            <Button 
+                disabled={isDisabled} 
+                loading="auto" 
+                onClick={onClickSign} 
+                className='sign-btn' 
+                block
+            >
+                注册并收下
+            </Button>
         </div>
     )
 }

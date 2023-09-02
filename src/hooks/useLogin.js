@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import { useCallback } from 'react'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -15,3 +17,20 @@ const useLogin = create(persist((set) => {
 }))
 
 export default useLogin
+
+export function useLoginPro() {
+    const {phone, code, set} = useLogin()
+
+    // 构建input更新函数
+    const genOnChange = useCallback((key) => {
+        return (value) => {
+            set({[key]: value});
+        }
+    }, [set]);
+
+    return useMemo(() => ({
+        data: {
+            phone, code
+        }, genOnChange
+    }), [phone, code, genOnChange])
+}

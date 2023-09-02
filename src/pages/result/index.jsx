@@ -2,8 +2,10 @@ import { Button } from "antd-mobile";
 import classNames from "classnames";
 import { useMemo } from "react";
 import copy from 'copy-to-clipboard'
+import { useLocation } from 'react-router-dom'
 import { message } from "../../utils";
 
+// 底部复制
 const SuFooter = () => {
     let url = "https://mymagicpaper.com/login"
 
@@ -22,9 +24,12 @@ const SuFooter = () => {
     )
 }
 
-function LoResult({success}) {
-    let title = success?'注册成功':'领取失败';
-    let description = useMemo(() => {
+function LoResult() {
+    const lo = useLocation();
+    const success = !!lo.state?.success;
+
+    const title = success?'注册成功':'领取失败';
+    const description = useMemo(() => {
         if (success) {
             return (
                 <>
