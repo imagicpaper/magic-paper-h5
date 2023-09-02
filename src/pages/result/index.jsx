@@ -2,8 +2,8 @@ import { Button } from "antd-mobile";
 import classNames from "classnames";
 import { useMemo } from "react";
 import copy from 'copy-to-clipboard'
-import { useLocation } from 'react-router-dom'
 import { message } from "../../utils";
+import useRouter from '../../hooks/useRouter'
 
 // 底部复制
 const SuFooter = () => {
@@ -25,8 +25,8 @@ const SuFooter = () => {
 }
 
 function LoResult() {
-    const lo = useLocation();
-    const success = !!lo.state;
+    const data = useRouter(stat => stat.data)
+    const success = !!data;
 
     const title = success?'注册成功':'领取失败';
     const description = useMemo(() => {

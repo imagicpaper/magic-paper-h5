@@ -2,18 +2,22 @@ import { Toast } from "antd-mobile"
 
 export const message = {
     fail(content, duration = 2e3) {
-        Toast.show({
-            icon: 'fail',
-            content,
-            duration
-        })
+        setTimeout(() => {
+            Toast.show({
+                icon: 'fail',
+                content,
+                duration
+            })
+        }, 1);
     },
     ok(content, duration = 2e3) {
-        Toast.show({
-            icon: 'success',
-            content,
-            duration
-        })
+        setTimeout(() => {
+            Toast.show({
+                icon: 'success',
+                content,
+                duration
+            })
+        }, 1);
     },
     loading(content) {
         let handler = Toast.show({

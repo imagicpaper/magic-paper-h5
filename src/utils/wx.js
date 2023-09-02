@@ -14,17 +14,10 @@ export function openOauth2Authorize() {
 }
 
 // 获取openid
-export async function getOpenId() {
+export async function getOpenId(code) {
     let data = JSON.parse(window.localStorage.getItem(key)||"{}")
-    
-    let sp = new URLSearchParams(location.search)
-    let code = sp.get("code")
-
     if (data?.openid) {
-        return {
-            openid: data.openid,
-            code
-        }
+        return data.openid
     }
   
     if (code) {
@@ -33,14 +26,8 @@ export async function getOpenId() {
 
         if (data.openid) {
             window.localStorage.setItem(key, JSON.stringify(data))
-            return {
-                openid: data.openid,
-                code
-            };
+            return data.openid
         }
     }
-    return {
-        openid: '',
-        code
-    }
+    return ''
 }
