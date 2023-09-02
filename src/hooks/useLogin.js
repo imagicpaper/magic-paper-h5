@@ -18,7 +18,7 @@ const useLogin = create(persist((set) => {
 
 export default useLogin
 
-export function useLoginPro() {
+export function useLoginInfo() {
     const {phone, code, set} = useLogin()
 
     // 构建input更新函数

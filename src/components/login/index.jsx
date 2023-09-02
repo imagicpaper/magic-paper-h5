@@ -1,19 +1,20 @@
 import { Input, Checkbox, Button } from 'antd-mobile'
 import { useState } from 'react';
 import { Dialog } from 'antd-mobile'
-import { useNavigate } from 'react-router-dom'
-import {useLoginPro} from '../../hooks/useLogin'
+import {useLoginInfo} from '../../hooks/useLogin'
 import {useLockFn, useMemoizedFn} from 'ahooks'
 import {message,isVaildPhone, sleep} from '../../utils'
 import Protocol from './protocol'
 import SendSms from '../SendSms'
+import { openOauth2Authorize } from '../../utils/wx'
+import useOauthRegister from '../../hooks/useOauthRegister'
 import { useMemo } from 'react';
 
 function Login() {
+    useOauthRegister()
     // 阅读并同意
     const [isRead, setIsRead] = useState(false)
-    const { data, genOnChange } = useLoginPro();
-    const nav = useNavigate();
+    const { data, genOnChange } = useLoginInfo()
 
     // 发送短信
     const onSendSms = useMemoizedFn(async () => {
@@ -45,12 +46,7 @@ function Login() {
             }
         }
 
-        await sleep(1e3)
-
-        nav("/result", {
-            replace: true,
-            state: {success: true}
-        })
+        openOauth2Authorize()
     })
 
     // 是否禁止按钮点击

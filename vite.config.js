@@ -34,7 +34,13 @@ const autoImpStyle = {
 export default defineConfig({
   server: {
     port: 6001,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    proxy: {
+      "/gapi": {
+        target: "http://localhost:8100/",
+        rewrite: (path) => path.replace("/gapi", "")
+      }
+    }
   },
   plugins: [
     react(),

@@ -26,7 +26,7 @@ const SuFooter = () => {
 
 function LoResult() {
     const lo = useLocation();
-    const success = !!lo.state?.success;
+    const success = !!lo.state;
 
     const title = success?'注册成功':'领取失败';
     const description = useMemo(() => {
