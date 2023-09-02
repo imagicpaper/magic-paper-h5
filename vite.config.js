@@ -18,8 +18,7 @@ const findStyle = (id, suffix = '.less') => {
  */
 const autoImpStyle = {
   name: "autoImpStyle",
-  async load(id) {
-    let code = await fs.promises.readFile(id, { encoding: 'utf-8' });
+  async transform(code, id) {
     if (/\.jsx$/.test(id)) {
       let stylepath = findStyle(id) || findStyle(id, '.css');
 
