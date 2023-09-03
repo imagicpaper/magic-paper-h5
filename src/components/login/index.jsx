@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dialog } from 'antd-mobile'
 import {useLoginInfo} from '../../hooks/useLogin'
 import {useLockFn, useMemoizedFn} from 'ahooks'
-import {message,isVaildPhone, sleep} from '../../utils'
+import {message,isVaildPhone} from '../../utils'
 import Protocol from './protocol'
 import SendSms from '../SendSms'
 import { openOauth2Authorize } from '../../utils/wx'
@@ -22,7 +22,7 @@ function Login() {
             throw new Error('请输入有效的手机号！')
         }
 
-        await sleep(500)
+        await fetch("/api/sms/getVerification?phone=" + data.phone);
     })
 
     // 点击注册按钮

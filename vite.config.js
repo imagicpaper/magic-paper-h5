@@ -39,6 +39,11 @@ export default defineConfig({
       "/gapi": {
         target: "http://localhost:8100/",
         rewrite: (path) => path.replace("/gapi", "")
+      },
+      "/api": {
+        target: 'https://share.mofaxiezuo.com',
+        changeOrigin: true,
+        secure: true
       }
     }
   },

@@ -23,6 +23,7 @@ const SendSms = ({onSend}) => {
     }, []);
 
     const onClick = useLockFn(async () => {
+        let close = message.loading("发送中...")
         try {
             await onSend()
             setCd(60)
@@ -30,6 +31,7 @@ const SendSms = ({onSend}) => {
         } catch(e) {
             message.fail(e.message)
         }
+        close()
     })
 
     return (
