@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useMemo } from "react";
 import copy from 'copy-to-clipboard'
 import { message } from "../../utils";
-import useRouter from '../../hooks/useRouter'
+import useRouter, { navigate } from '../../hooks/useRouter'
 
 // 底部复制
 const SuFooter = () => {
@@ -46,12 +46,18 @@ function LoResult() {
         )
     }, [success]);
 
+    const onReturn = () => {
+        navigate("/")
+    }
+
     return (
         <div className="lo-result">
             <div className={classNames("icon", success ? 'success-icon' : 'warn-icon')}/>
             <div className="title">{title}</div>
             <div className="description">{description}</div>
             {success && <SuFooter/>}
+
+            <div className="reture-btn" onClick={onReturn}>返回</div>
         </div>
     )
 }

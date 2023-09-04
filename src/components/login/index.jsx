@@ -6,12 +6,13 @@ import {useLockFn, useMemoizedFn} from 'ahooks'
 import {message,isVaildPhone} from '../../utils'
 import Protocol from './protocol'
 import SendSms from '../SendSms'
-import { openOauth2Authorize } from '../../utils/wx'
-import useOauthRegister from '../../hooks/useOauthRegister'
+import { getOpenIdOrOauth } from '../../utils/wx'
+import useShareRegister from '../../hooks/useShareRegister'
 import { useMemo } from 'react';
 
 function Login() {
-    useOauthRegister()
+    // 进行注册
+    const doRegister = useShareRegister()
     // 阅读并同意
     const [isRead, setIsRead] = useState(false)
     const { data, genOnChange } = useLoginInfo()
@@ -46,7 +47,10 @@ function Login() {
             }
         }
 
-        openOauth2Authorize()
+        const openid = getOpenIdOrOauth()
+        if (openid) {
+            await doRegister({openid, phone, code})
+        }
     })
 
     // 是否禁止按钮点击

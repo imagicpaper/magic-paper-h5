@@ -1,8 +1,27 @@
 const appid = import.meta.env.VITE_APPID
 const key = "magic:wx:openid"
 
-// 打开oauth登录页面
-export function openOauth2Authorize() {
+// 获取openid
+export async function getOpenIdByCode(code) {
+    if (code) {
+        let resp = await fetch("/gapi/get/openid?code=" + code, {method: "GET"})
+        let data = await resp.json()
+
+        if (data.openid) {
+            window.localStorage.setItem(key, JSON.stringify(data))
+            return data.openid
+        }
+    }
+    return ''
+}
+
+// 从内存中获取openid 否则触发oauth
+export function getOpenIdOrOauth() {
+    let data = JSON.parse(window.localStorage.getItem(key)||"{}")
+    if (data?.openid) {
+        return data.openid
+    }
+
     const redirect = window.location.href;
 
     window.open("https://open.weixin.qq.com/connect/oauth2/authorize" + 
@@ -11,23 +30,4 @@ export function openOauth2Authorize() {
       "&response_type=code" + 
       "&scope=snsapi_userinfo" + 
       "&state=ok#wechat_redirect", "_top")
-}
-
-// 获取openid
-export async function getOpenId(code) {
-    let data = JSON.parse(window.localStorage.getItem(key)||"{}")
-    if (data?.openid) {
-        return data.openid
-    }
-  
-    if (code) {
-        let resp = await fetch("/gapi/get/openid?code=" + code, {method: "GET"})
-        data = await resp.json()
-
-        if (data.openid) {
-            window.localStorage.setItem(key, JSON.stringify(data))
-            return data.openid
-        }
-    }
-    return ''
 }
